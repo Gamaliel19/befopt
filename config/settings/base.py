@@ -14,9 +14,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # La clé secrète et le mode DEBUG sont TOUJOURS définis via variables
 # d'environnement (voir .env.example) : jamais codés en dur ici.
 SECRET_KEY = config("DJANGO_SECRET_KEY")
+
+import os
+
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
+ALLOWED_HOSTS = [
+    "befopt.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
+"""
 DEBUG = config("DJANGO_DEBUG", default=False, cast=bool)
 ALLOWED_HOSTS = config("DJANGO_ALLOWED_HOSTS", default="", cast=Csv())
-
+"""
 
 # Applications installées.
 DJANGO_APPS = [

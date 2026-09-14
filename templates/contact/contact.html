@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Contact — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1>Nous contacter</h1>
+
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert--success">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+
+        <div class="two-col">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {{ form.website }}
+                {% for field in form.visible_fields %}
+                <div class="form-field">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+                    {{ field }}
+                    {% if field.errors %}<span class="form-field__error">{{ field.errors|striptags }}</span>{% endif %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="btn btn--primary">Envoyer le message</button>
+            </form>
+
+            <div class="card">
+                <h3>Coordonnées</h3>
+                <p>
+                    {% if site_settings.address %}{{ site_settings.address }}<br>{% endif %}
+                    {% if site_settings.phone_1 %}{{ site_settings.phone_1 }}{% endif %}
+                    {% if site_settings.phone_2 %} · {{ site_settings.phone_2 }}{% endif %}
+                </p>
+                {% if site_settings.email %}<p><a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a></p>{% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

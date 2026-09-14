@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Nos expertises — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="section__intro">
+            <h1>Nos expertises</h1>
+        </div>
+        {% if services %}
+        <div class="card-grid card-grid--services">
+            {% for service in services %}
+            <div class="card">
+                <div class="card__icon">{{ forloop.counter }}</div>
+                <h3><a href="{% url 'services:detail' slug=service.slug %}">{{ service.title }}</a></h3>
+                <p>{{ service.short_description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-state">Aucune expertise publiée pour le moment.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,12 @@
+-r base.txt
+
+# Outils de développement uniquement (jamais installés en production).
+#   django-debug-toolbar -> inspection des requêtes SQL/templates en local
+#   ruff                 -> linting rapide (remplace flake8)
+#   black                -> formatage automatique du code
+#   pytest / pytest-django -> exécution des tests (Phase 10)
+django-debug-toolbar>=4.4,<5.0
+ruff>=0.7,<1.0
+black>=24.0,<25.0
+pytest>=8.0,<9.0
+pytest-django>=4.9,<5.0

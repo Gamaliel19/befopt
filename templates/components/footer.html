@@ -1,0 +1,36 @@
+<footer class="site-footer">
+    <div class="site-footer__grid">
+        <div>
+            <strong>{{ site_settings.site_name }}</strong>
+            <p>{{ site_settings.tagline }}</p>
+        </div>
+        <div>
+            <strong>Coordonnées</strong>
+            <p>
+                {% if site_settings.address %}{{ site_settings.address }}<br>{% endif %}
+                {% if site_settings.phone_1 %}{{ site_settings.phone_1 }}{% endif %}
+                {% if site_settings.phone_2 %} · {{ site_settings.phone_2 }}{% endif %}
+                {% if site_settings.email %}<br><a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a>{% endif %}
+            </p>
+        </div>
+        <div>
+            <strong>Liens rapides</strong>
+            <p>
+                <a href="{% url 'services:list' %}">Nos expertises</a><br>
+                <a href="{% url 'formations:list' %}">Formations</a><br>
+                <a href="{% url 'news:list' %}">Actualités</a><br>
+                <a href="{% url 'contact:contact' %}">Contact</a>
+            </p>
+            {% if site_settings.facebook_url or site_settings.linkedin_url or site_settings.twitter_url %}
+            <p>
+                {% if site_settings.facebook_url %}<a href="{{ site_settings.facebook_url }}">Facebook</a> {% endif %}
+                {% if site_settings.linkedin_url %}<a href="{{ site_settings.linkedin_url }}">LinkedIn</a> {% endif %}
+                {% if site_settings.twitter_url %}<a href="{{ site_settings.twitter_url }}">X</a>{% endif %}
+            </p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="site-footer__bottom container">
+        {% if site_settings.footer_text %}{{ site_settings.footer_text }}{% else %}&copy; {{ site_settings.site_name }}{% endif %}
+    </div>
+</footer>

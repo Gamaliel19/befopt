@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <h1>{{ site_settings.tagline|default:"L'excellence en orientation et ingénierie de formation" }}</h1>
+        <p class="tagline">{{ site_settings.mission_text|default:"Le cabinet BEFOPT accompagne l'orientation professionnelle, la formation et l'insertion dans les filières technologiques de pointe." }}</p>
+        <a href="{% url 'contact:contact' %}" class="btn btn--primary">Nous contacter</a>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section__intro">
+            <h2>Nos expertises</h2>
+        </div>
+        {% if services %}
+        <div class="card-grid card-grid--services">
+            {% for service in services %}
+            <div class="card">
+                <div class="card__icon">{{ forloop.counter }}</div>
+                <h3><a href="{% url 'services:detail' slug=service.slug %}">{{ service.title }}</a></h3>
+                <p>{{ service.short_description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="empty-state">Les domaines d'expertise seront affichés ici dès leur publication depuis l'administration.</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="section section--alt">
+    <div class="container two-col">
+        <div class="card">
+            <h3>Nos atouts différenciateurs</h3>
+            <p>Un réseau d'élite d'experts en orientation, chefs d'entreprises et consultants internationaux basés au Tchad et à l'étranger, des infrastructures modernes (espace de co-working) et une proximité digitale avec nos partenaires internationaux.</p>
+        </div>
+        <div class="card">
+            <h3>Notre vision d'avenir</h3>
+            <p>Développer des alliances académiques avec de grandes universités en Europe, en Afrique et au Tchad, et digitaliser notre offre via une plateforme de cours en ligne en ingénierie.</p>
+        </div>
+    </div>
+</section>
+
+{% if latest_formations %}
+<section class="section">
+    <div class="container">
+        <div class="section__intro">
+            <h2>Dernières formations</h2>
+        </div>
+        <div class="card-grid">
+            {% for formation in latest_formations %}
+            <div class="card">
+                {% if formation.image %}<img src="{{ formation.image.url }}" alt="{{ formation.image_alt_text }}">{% endif %}
+                <h3><a href="{% url 'formations:detail' slug=formation.slug %}">{{ formation.title }}</a></h3>
+                <p>{{ formation.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if latest_news %}
+<section class="section section--alt">
+    <div class="container">
+        <div class="section__intro">
+            <h2>Dernières actualités</h2>
+        </div>
+        <div class="card-grid">
+            {% for article in latest_news %}
+            <div class="card">
+                {% if article.image %}<img src="{{ article.image.url }}" alt="{{ article.image_alt_text }}">{% endif %}
+                <h3><a href="{% url 'news:detail' slug=article.slug %}">{{ article.title }}</a></h3>
+                <p>{{ article.excerpt }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<section class="section">
+    <div class="container">
+        <div class="cta-final">
+            <h2>Discutons de votre projet</h2>
+            <p>Que vous soyez un jeune en recherche d'orientation, une entreprise ou une institution, parlons-en.</p>
+            <a href="{% url 'contact:contact' %}" class="btn btn--primary">Nous contacter</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

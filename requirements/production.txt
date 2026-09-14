@@ -1,0 +1,9 @@
+-r base.txt
+
+# Dépendances propres à la production.
+#   gunicorn -> serveur WSGI de production
+#   whitenoise -> sert les fichiers statiques efficacement sans dépendre
+#                 d'un CDN dès le lancement (peut être remplacé plus tard)
+gunicorn>=23.0,<24.0
+whitenoise>=6.7,<7.0
+dj-database-url>=2.3,<3.0

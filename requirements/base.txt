@@ -1,0 +1,13 @@
+# Dépendances communes à tous les environnements.
+# Chaque paquet ci-dessous est justifié :
+#   Django          -> framework principal (contrainte du projet)
+#   psycopg2-binary -> pilote PostgreSQL pour Django
+#   python-decouple -> lecture propre des variables d'environnement (.env),
+#                      pour ne jamais coder de secret en dur
+#   Pillow          -> traitement d'images (upload, redimensionnement) requis
+#                      par les ImageField de Django
+
+Django>=5.2,<5.3
+psycopg2-binary>=2.9,<3.0
+python-decouple>=3.8,<4.0
+Pillow>=11.0,<12.0

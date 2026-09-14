@@ -1,0 +1,12 @@
+<header class="site-header">
+    <a href="{% url 'pages:home' %}" class="site-header__brand">{{ site_settings.site_name }}</a>
+    <nav class="site-header__nav">
+        <a href="{% url 'pages:home' %}">Accueil</a>
+        <a href="{% url 'pages:detail' slug='a-propos' %}">À propos</a>
+        <a href="{% url 'services:list' %}">Expertises</a>
+        <a href="{% url 'formations:list' %}">Formations</a>
+        <a href="{% url 'news:list' %}">Actualités</a>
+        <a href="{% url 'pages:detail' slug='entreprises-institutions' %}">Entreprises & institutions</a>
+        <a href="{% url 'contact:contact' %}">Contact</a>
+    </nav>
+</header>

@@ -45,17 +45,18 @@ Dans le tableau de bord Render : **New → PostgreSQL**. Notez l'URL de connexio
 
 **New → Web Service**, connectez votre dépôt GitHub, puis renseignez :
 
-| Champ              | Valeur                                                                                   |
-|--------------------|------------------------------------------------------------------------------------------|
-| Build Command      | `pip install -r requirements/production.txt && python manage.py collectstatic --noinput` |
-| Start Command      | `gunicorn config.wsgi:application`                                                       |
-| Pre-Deploy Command | `python manage.py migrate --noinput`                                                     |
+| Champ | Valeur |
+|---|---|
+| Build Command | `pip install -r requirements/production.txt && python manage.py collectstatic --noinput` |
+| Start Command | `gunicorn config.wsgi:application` |
+| Pre-Deploy Command | `python manage.py migrate --noinput` |
 
 ### 3. Variables d'environnement
 
 À définir dans l'onglet « Environment » du service (voir `.env.example` pour la liste complète) :
 
 ```
+DJANGO_SETTINGS_MODULE=config.settings.production
 DJANGO_SECRET_KEY=<générée avec get_random_secret_key(), différente de celle du local>
 DJANGO_DEBUG=False
 DJANGO_ALLOWED_HOSTS=votre-domaine.td,befopt.onrender.com
@@ -68,7 +69,11 @@ EMAIL_HOST_PASSWORD=...
 EMAIL_USE_TLS=True
 ```
 
+**Important — `DJANGO_SETTINGS_MODULE` est indispensable.** `manage.py` pointe par défaut vers `config.settings.development` (pratique en local). Sans cette variable définie sur Render, le build essaie de charger les réglages de développement, qui exigent quand même `DJANGO_SECRET_KEY` — d'où l'erreur `decouple.UndefinedValueError: DJANGO_SECRET_KEY not found` si les variables ne sont pas encore renseignées au moment du build.
+
 (`DATABASE_URL` est injectée automatiquement par Render, pas besoin de la définir vous-même.)
+
+**Version de Python** : Render lit un fichier `.python-version` à la racine du projet (déjà présent, fixé à `3.12.8`) — pas `runtime.txt`, qui est une convention Heroku ignorée par Render.
 
 ### 4. Premier déploiement
 

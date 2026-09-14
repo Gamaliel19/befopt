@@ -45,11 +45,11 @@ Dans le tableau de bord Render : **New → PostgreSQL**. Notez l'URL de connexio
 
 **New → Web Service**, connectez votre dépôt GitHub, puis renseignez :
 
-| Champ | Valeur |
-|---|---|
-| Build Command | `pip install -r requirements/production.txt && python manage.py collectstatic --noinput` |
-| Start Command | `gunicorn config.wsgi:application` |
-| Pre-Deploy Command | `python manage.py migrate --noinput` |
+| Champ              | Valeur                                                                                   |
+|--------------------|------------------------------------------------------------------------------------------|
+| Build Command      | `pip install -r requirements/production.txt && python manage.py collectstatic --noinput` |
+| Start Command      | `gunicorn config.wsgi:application`                                                       |
+| Pre-Deploy Command | `python manage.py migrate --noinput`                                                     |
 
 ### 3. Variables d'environnement
 

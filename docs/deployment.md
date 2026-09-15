@@ -50,10 +50,19 @@ Dans le tableau de bord Render : **New → PostgreSQL**. Une fois créée, ouvre
 | Champ | Valeur |
 |---|---|
 | Build Command | `pip install -r requirements/production.txt && python manage.py collectstatic --noinput` |
-| Start Command | `gunicorn config.wsgi:application` |
-| Pre-Deploy Command | `python manage.py migrate --noinput` |
+| Start Command | `python manage.py migrate --noinput && (python manage.py createsuperuser --noinput \|\| true) && gunicorn config.wsgi:application` |
 
-Le champ **Pre-Deploy Command** peut être masqué par défaut selon la version de l'interface Render : cherchez-le dans **Settings → Build & Deploy** du service si vous ne le voyez pas au moment de la création. Sans cette commande, la base de données reste vide (aucune table) et **chaque page renvoie une erreur 500**.
+**Note sur la Pre-Deploy Command** : cette fonctionnalité (recommandée dans une version précédente de ce document) est réservée aux plans payants de Render — sur un plan gratuit/starter, le champ reste grisé. La solution ci-dessus contourne ce blocage en exécutant `migrate` directement au démarrage, avant Gunicorn : la commande est sans risque à chaque redémarrage (Django ignore les migrations déjà appliquées).
+
+**Créer le compte administrateur sans accès au Shell** : si l'onglet Shell est lui aussi indisponible sur votre plan, la Start Command inclut déjà `createsuperuser --noinput`, qui lit les identifiants depuis trois variables d'environnement à ajouter (section 3 ci-dessous) :
+
+```
+DJANGO_SUPERUSER_USERNAME=admin
+DJANGO_SUPERUSER_EMAIL=admin@befopt.td
+DJANGO_SUPERUSER_PASSWORD=<un mot de passe robuste, différent de celui de votre compte Render>
+```
+
+Le `|| true` rend l'étape silencieuse et sans effet une fois le compte déjà créé (testé : les redémarrages suivants ne provoquent ni erreur ni doublon). Une fois connecté à `/admin/` avec ce compte, vous pouvez retirer `DJANGO_SUPERUSER_PASSWORD` des variables d'environnement si vous préférez ne pas le laisser en clair dans la configuration.
 
 ### 3. Variables d'environnement
 
@@ -84,16 +93,16 @@ EMAIL_USE_TLS=True
 Si le build et le déploiement se terminent avec succès mais que le site renvoie une erreur 500 sur toutes les pages, c'est presque toujours l'une de ces deux causes (avant de chercher plus loin, consultez l'onglet **Logs** du service sur Render : la trace Python complète y est écrite même quand `DEBUG=False`) :
 
 1. **`DATABASE_URL` absente ou mal renseignée** → l'application ne peut pas se connecter à la base. Vérifiez qu'elle est bien présente dans Environment, avec la valeur exacte de l'*Internal Database URL* de votre base PostgreSQL.
-2. **Migrations jamais appliquées** → la base existe mais ne contient aucune table. Ajoutez la Pre-Deploy Command indiquée à l'étape 2, ou lancez-la manuellement une fois via l'onglet **Shell** du service : `python manage.py migrate`.
+2. **Migrations jamais appliquées** → la base existe mais ne contient aucune table. Vérifiez que la Start Command du service est bien celle indiquée à l'étape 2 (avec `migrate --noinput` en premier), pas juste `gunicorn config.wsgi:application` seul.
 
 Après correction, redéclenchez un déploiement (« Manual Deploy → Deploy latest commit »).
 
 ### 4. Premier déploiement
 
-Render déploie automatiquement à chaque push sur la branche configurée. Une fois en ligne :
+Render déploie automatiquement à chaque push sur la branche configurée. Le compte administrateur est créé automatiquement au premier démarrage grâce aux variables `DJANGO_SUPERUSER_*` (étape 2). Si l'onglet **Shell** est disponible sur votre plan, vous pouvez aussi créer/gérer des comptes manuellement :
 
 ```
-# Depuis le Shell Render (onglet "Shell" du service)
+# Depuis le Shell Render (onglet "Shell" du service, si disponible sur votre plan)
 python manage.py createsuperuser
 ```
 

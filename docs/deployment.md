@@ -39,7 +39,9 @@
 
 ### 1. Base de données
 
-Dans le tableau de bord Render : **New → PostgreSQL**. Notez l'URL de connexion interne générée (`DATABASE_URL`), déjà lue automatiquement par `config/settings/production.py`.
+Dans le tableau de bord Render : **New → PostgreSQL**. Une fois créée, ouvrez la fiche de cette base et copiez la valeur **Internal Database URL**.
+
+**Important — cette liaison n'est pas automatique.** Contrairement à ce que j'avais indiqué précédemment, Render ne relie pas tout seul une base PostgreSQL à un service web : il faut ajouter manuellement `DATABASE_URL` dans les variables d'environnement du service web (étape 3), avec la valeur copiée ici.
 
 ### 2. Service web
 
@@ -50,6 +52,8 @@ Dans le tableau de bord Render : **New → PostgreSQL**. Notez l'URL de connexio
 | Build Command | `pip install -r requirements/production.txt && python manage.py collectstatic --noinput` |
 | Start Command | `gunicorn config.wsgi:application` |
 | Pre-Deploy Command | `python manage.py migrate --noinput` |
+
+Le champ **Pre-Deploy Command** peut être masqué par défaut selon la version de l'interface Render : cherchez-le dans **Settings → Build & Deploy** du service si vous ne le voyez pas au moment de la création. Sans cette commande, la base de données reste vide (aucune table) et **chaque page renvoie une erreur 500**.
 
 ### 3. Variables d'environnement
 
@@ -71,9 +75,18 @@ EMAIL_USE_TLS=True
 
 **Important — `DJANGO_SETTINGS_MODULE` est indispensable.** `manage.py` pointe par défaut vers `config.settings.development` (pratique en local). Sans cette variable définie sur Render, le build essaie de charger les réglages de développement, qui exigent quand même `DJANGO_SECRET_KEY` — d'où l'erreur `decouple.UndefinedValueError: DJANGO_SECRET_KEY not found` si les variables ne sont pas encore renseignées au moment du build.
 
-(`DATABASE_URL` est injectée automatiquement par Render, pas besoin de la définir vous-même.)
+`DATABASE_URL` n'est **pas** injectée automatiquement (voir étape 1 ci-dessus) — ajoutez-la vous-même dans cette même liste, avec la valeur copiée depuis la fiche de votre base PostgreSQL.
 
 **Version de Python** : Render lit un fichier `.python-version` à la racine du projet (déjà présent, fixé à `3.12.8`) — pas `runtime.txt`, qui est une convention Heroku ignorée par Render.
+
+## Dépannage — erreur 500 après un déploiement réussi
+
+Si le build et le déploiement se terminent avec succès mais que le site renvoie une erreur 500 sur toutes les pages, c'est presque toujours l'une de ces deux causes (avant de chercher plus loin, consultez l'onglet **Logs** du service sur Render : la trace Python complète y est écrite même quand `DEBUG=False`) :
+
+1. **`DATABASE_URL` absente ou mal renseignée** → l'application ne peut pas se connecter à la base. Vérifiez qu'elle est bien présente dans Environment, avec la valeur exacte de l'*Internal Database URL* de votre base PostgreSQL.
+2. **Migrations jamais appliquées** → la base existe mais ne contient aucune table. Ajoutez la Pre-Deploy Command indiquée à l'étape 2, ou lancez-la manuellement une fois via l'onglet **Shell** du service : `python manage.py migrate`.
+
+Après correction, redéclenchez un déploiement (« Manual Deploy → Deploy latest commit »).
 
 ### 4. Premier déploiement
 

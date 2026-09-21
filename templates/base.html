@@ -7,6 +7,7 @@
     <title>{% block title %}{{ site_settings.site_name }} — {{ site_settings.tagline }}{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}{{ site_settings.default_meta_description|default:site_settings.tagline }}{% endblock %}">
     <link rel="canonical" href="{% block canonical_url %}https://{{ request.get_host }}{{ request.path }}{% endblock %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
     {# Open Graph / réseaux sociaux (section 18 du cahier des charges) #}
     <meta property="og:site_name" content="{{ site_settings.site_name }}">

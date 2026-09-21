@@ -1,7 +1,11 @@
 <footer class="site-footer">
     <div class="site-footer__grid">
         <div>
-            <strong>{{ site_settings.site_name }}</strong>
+            <a href="{% url 'pages:home' %}" style="display: flex; width: 50px;">
+                <img src="/static/images/logo.jpeg" alt="Logo" style="margin: 4px;">
+                <span>{{ site_settings.site_name }}</span>
+            </a>
+           <!-- <strong>{{ site_settings.site_name }}</strong>-->
             <p>{{ site_settings.tagline }}</p>
         </div>
         <div>
@@ -10,7 +14,7 @@
                 {% if site_settings.address %}{{ site_settings.address }}<br>{% endif %}
                 {% if site_settings.phone_1 %}{{ site_settings.phone_1 }}{% endif %}
                 {% if site_settings.phone_2 %} · {{ site_settings.phone_2 }}{% endif %}
-                {% if site_settings.email %}<br><a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a>{% endif %}
+                {% if site_settings.email %}<br><a href="mailto:{{ site_settings.email }}">{{ site_settings.email}}</a>{% endif %}
             </p>
         </div>
         <div>
@@ -23,14 +27,14 @@
             </p>
             {% if site_settings.facebook_url or site_settings.linkedin_url or site_settings.twitter_url %}
             <p>
-                {% if site_settings.facebook_url %}<a href="{{ site_settings.facebook_url }}">Facebook</a> {% endif %}
-                {% if site_settings.linkedin_url %}<a href="{{ site_settings.linkedin_url }}">LinkedIn</a> {% endif %}
-                {% if site_settings.twitter_url %}<a href="{{ site_settings.twitter_url }}">X</a>{% endif %}
+                {% if site_settings.facebook_url %}<a href="{{ site_settings.facebook_url }}"><i class="fab fa-facebook-f"></i></a> {% endif %}
+                {% if site_settings.linkedin_url %}<a href="{{ site_settings.linkedin_url }}"><i class="fab fa-linkedin-in"></i></a> {% endif %}
+                {% if site_settings.twitter_url %}<a href="{{ site_settings.twitter_url }}"><i class="fab fa-twitter"></i></a>{% endif %}
             </p>
             {% endif %}
         </div>
     </div>
     <div class="site-footer__bottom container">
-        {% if site_settings.footer_text %}{{ site_settings.footer_text }}{% else %}&copy; {{ site_settings.site_name }}, Développer par Yahe{% endif %}
+        {% if site_settings.footer_text %}{{ site_settings.footer_text }}{% else %}&copy; {{ site_settings.site_name}}{% endif %}
     </div>
 </footer>

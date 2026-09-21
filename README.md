@@ -83,3 +83,9 @@ Voir `docs/architecture.md` (à venir) pour le détail de chaque app.
 
 (Ces documents seront rédigés au fil des phases correspondantes de la
 roadmap, et non tous d'un coup.)
+
+
+
+
+username:befoptAdmin
+pwd:befopt@2026

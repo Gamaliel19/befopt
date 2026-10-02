@@ -70,7 +70,7 @@ befopt/
 └── docs/
 ```
 
-Voir `docs/architecture.md` (à venir) pour le détail de chaque app.
+Voir `docs/architecture.md` pour le détail de chaque app.
 
 ## Documentation
 
@@ -81,11 +81,3 @@ Voir `docs/architecture.md` (à venir) pour le détail de chaque app.
 - `docs/security.md` — pratiques de sécurité appliquées
 - `docs/maintenance.md` — procédures de maintenance
 
-(Ces documents seront rédigés au fil des phases correspondantes de la
-roadmap, et non tous d'un coup.)
-
-
-
-
-username:befoptAdmin
-pwd:befopt@2026
